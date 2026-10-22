@@ -56,11 +56,16 @@ jobs:
         run: npm run ${{ matrix.script }}
         env:
           CSC_IDENTITY_AUTO_DISCOVERY: 'false'
+      - name: Test Windows installer
+        if: runner.os == 'Windows'
+        shell: pwsh
+        run: ./scripts/test-installer.ps1
       - run: npm run checksums
       - uses: actions/upload-artifact@v4
         with:
           name: ${{ matrix.artifact }}
           path: |
+            release/*.exe
             release/*.zip
             release/*.AppImage
             release/SHA256SUMS.txt
