@@ -1,0 +1,10 @@
+const fs=require('node:fs');
+const path=require('node:path');
+const {execFileSync}=require('node:child_process');
+const {version}=require('../package.json');
+if(!/^\d+\.\d+\.\d+(?:-[a-zA-Z0-9.-]+)?$/.test(version))throw new Error('Invalid release version');
+const root=path.resolve(__dirname,'..');
+const output=path.join(root,'release',`Repo-Map-Source-${version}.zip`);
+fs.mkdirSync(path.dirname(output),{recursive:true});
+execFileSync('git',['archive','--format=zip',`--prefix=repo-map-${version}/`,'--output',output,'HEAD'],{cwd:root,stdio:'inherit'});
+console.log(`Source archive: ${path.basename(output)} (committed files only)`);
