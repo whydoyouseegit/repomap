@@ -75,4 +75,4 @@ npm start
 
 Нужен Node.js **22.12 или новее**. [Сборка, проверки и структура проекта](docs/DEVELOPMENT.md).
 
-**Создатель — [/home/whydoyousee](https://github.com/whydoyouseegit).** Лицензия — [MIT](LICENSE).
+Лицензия — [MIT](LICENSE).
