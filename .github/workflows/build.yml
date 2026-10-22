@@ -1,0 +1,67 @@
+name: Build desktop apps
+on:
+  pull_request:
+  workflow_dispatch:
+    inputs:
+      signed_windows:
+        description: 'Sign Windows with WIN_CSC_LINK and WIN_CSC_KEY_PASSWORD secrets'
+        type: boolean
+        default: false
+  push:
+    branches: [main]
+    tags: ['v*']
+permissions:
+  contents: read
+jobs:
+  build:
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - os: windows-latest
+            script: build:win
+            artifact: Repo-Map-Windows-x64
+          - os: ubuntu-latest
+            script: build:linux
+            artifact: Repo-Map-Linux-x64
+          - os: macos-latest
+            script: build:mac
+            artifact: Repo-Map-macOS
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - run: npm test
+      - name: Build unsigned Windows preview
+        if: runner.os == 'Windows' && !inputs.signed_windows
+        run: npm run build:win
+      - name: Build signed Windows release
+        if: runner.os == 'Windows' && inputs.signed_windows
+        shell: pwsh
+        env:
+          WIN_CSC_LINK: ${{ secrets.WIN_CSC_LINK }}
+          WIN_CSC_KEY_PASSWORD: ${{ secrets.WIN_CSC_KEY_PASSWORD }}
+        run: |
+          if (-not $env:WIN_CSC_LINK) { throw 'WIN_CSC_LINK is required for a signed Windows build.' }
+          npm run build:win:signed
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+          $signature = Get-AuthenticodeSignature 'release/win-unpacked/Repo Map.exe'
+          if ($signature.Status -ne 'Valid') { throw "Signature validation failed: $($signature.Status)" }
+      - name: Build Linux or macOS
+        if: runner.os != 'Windows'
+        run: npm run ${{ matrix.script }}
+        env:
+          CSC_IDENTITY_AUTO_DISCOVERY: 'false'
+      - run: npm run checksums
+      - uses: actions/upload-artifact@v4
+        with:
+          name: ${{ matrix.artifact }}
+          path: |
+            release/*.zip
+            release/*.AppImage
+            release/SHA256SUMS.txt
+          if-no-files-found: error

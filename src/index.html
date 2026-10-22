@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; connect-src 'none'; object-src 'none'; base-uri 'none'">
+  <title>Repo Map</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand"><span class="prompt">&gt;_</span> repo<span class="muted">@</span>map<span class="cursor">:</span><span class="muted">~$</span><span class="version">v0.1.2</span></div>
+    <nav><button id="navMap" class="nav active">~/UNIVERSE</button><button id="navFiles" class="nav">~/FILES</button><button id="openHelp" class="nav">~/HELP</button></nav>
+  </header>
+  <div class="commandbar">
+    <div class="project-path"><span class="muted">workspace /</span> <strong id="projectName">orbital-engine</strong><span id="demoBadge" class="badge">DEMO</span></div>
+    <div class="project-actions"><button id="cloneBtn" class="button">↳ Git-ссылка</button><button id="openFolder" class="button primary">＋ Открыть папку</button></div>
+  </div>
+  <main>
+    <aside class="explorer">
+      <div class="aside-title"><span>ОБОЗРЕВАТЕЛЬ</span><button id="collapseTree" class="icon" title="Свернуть дерево" aria-label="Свернуть дерево">−</button></div>
+      <div class="search-box"><span>⌕</span><input id="search" aria-label="Найти файл или символ" placeholder="Найти файл, класс…" autocomplete="off"><kbd>/</kbd></div>
+      <div class="tree-root"><span>⌄</span> <strong id="treeRoot">orbital-engine</strong> <span class="muted" id="treeCount"></span></div>
+      <div id="tree" class="tree" role="tree" aria-label="Дерево проекта"></div>
+      <div id="recentBox" class="recent-box"><div class="aside-title">НЕДАВНИЕ</div><div id="recents"></div></div>
+      <div class="sidebar-footer"><span class="muted">user@terminal:~$</span><span> explore <span class="blink">▌</span></span></div>
+    </aside>
+    <section class="universe" id="universe" aria-label="Карта проекта">
+      <canvas id="space" tabindex="0" aria-label="Трёхмерная карта. Используйте мышь для вращения, колесо для масштаба, поиск для выбора узла."></canvas>
+      <div class="map-caption"><div class="eyebrow">REPOSITORY EXPLORER / 001</div><h1>ВСЕЛЕННАЯ<br>ПРОЕКТА<span class="cursor">_</span></h1><p id="subtitle">Файлы. Классы. Связи между ними.</p></div>
+      <div class="map-top-right"><button id="rescan" class="button small" title="Перечитать проект">↻ Обновить</button><button id="exportBtn" class="button small" title="Сохранить структуру без исходного кода">↓ JSON</button></div>
+      <div id="hoverLabel" class="hover-label" hidden></div>
+      <div class="map-legend"><span><i class="dot file-dot"></i> файл</span><span><i class="diamond"></i> класс</span><span><i class="dot fn-dot"></i> функция</span></div>
+      <div class="axis" aria-hidden="true"><span>Z</span><svg viewBox="0 0 62 56"><path d="M30 28V5M30 28L8 44M30 28L54 44" stroke="#535353" fill="none"/><circle cx="30" cy="28" r="2" fill="#ccc"/></svg><b>X</b><em>Y</em></div>
+      <div class="bottom-hud"><div class="view-switch"><button class="active" data-layout="universe">◉ Вселенная</button><button data-layout="clusters">⠿ Кластеры</button></div><div class="map-controls"><button id="zoomOut" title="Отдалить" aria-label="Отдалить">−</button><span id="zoomValue">100%</span><button id="zoomIn" title="Приблизить" aria-label="Приблизить">+</button><span class="divider"></span><button id="resetView" title="Сбросить ракурс" aria-label="Сбросить ракурс">⌖</button><button id="pause" title="Приостановить вращение" aria-label="Приостановить вращение">Ⅱ</button></div></div>
+      <div class="gesture-hint">ЛКМ — вращение <span>·</span> ПКМ — сдвиг <span>·</span> колесо — масштаб</div>
+    </section>
+    <aside class="inspector" id="inspector">
+      <div class="aside-title"><span>ИНСПЕКТОР УЗЛА</span><button id="clearSelection" class="icon" title="Снять выделение" aria-label="Снять выделение">×</button></div>
+      <div id="inspectorContent"></div>
+      <div class="display-options"><div class="aside-title">ОТОБРАЖЕНИЕ</div><label><input type="checkbox" id="showFiles" checked><span>Файлы и папки</span><span class="option-icon">◦</span></label><label><input type="checkbox" id="showClasses" checked><span>Классы и интерфейсы</span><span class="option-icon">◇</span></label><label><input type="checkbox" id="showFunctions" checked><span>Функции и методы</span><span class="option-icon">·</span></label><label><input type="checkbox" id="showEdges"><span>Все импорты</span><span class="option-icon">↗</span></label><label><input type="checkbox" id="showDust" checked><span>Свечение объёма кода</span><span class="option-icon">⠿</span></label></div>
+    </aside>
+  </main>
+  <footer class="statusbar"><div class="status-ready"><i></i><span id="status">Демонстрационный проект</span></div><div class="stats"><span><b id="statFiles">0</b> файлов</span><span><b id="statClasses">0</b> классов</span><span><b id="statFunctions">0</b> функций</span><span><b id="statEdges">0</b> импортов</span></div><span class="status-right">READ ONLY <span class="muted">/</span> NO CLOUD</span></footer>
+  <dialog id="gitDialog"><form id="gitForm"><div class="dialog-bar"><span>user@terminal:~$ git clone</span><button type="button" class="icon close-dialog" aria-label="Закрыть">×</button></div><div class="dialog-body"><div class="eyebrow">ПОДКЛЮЧИТЬ РЕПОЗИТОРИЙ</div><h2>НОВАЯ ВСЕЛЕННАЯ_</h2><p>Репозиторий будет клонирован в локальный кэш.<br>Код анализируется на вашем компьютере.</p><label for="gitUrl" class="field-label">HTTPS / SSH</label><input id="gitUrl" required placeholder="https://github.com/user/project.git" autocomplete="off"><p class="fine">Для клонирования нужен Git. Приватные репозитории используют настроенный SSH-ключ или Git Credential Manager.</p><div class="dialog-actions"><button type="button" class="button close-dialog">Отмена</button><button class="button primary" type="submit">↳ Клонировать и открыть</button></div></div></form></dialog>
+  <dialog id="helpDialog"><div class="dialog-bar"><span>user@terminal:~$ cat help.txt</span><button class="icon close-dialog" aria-label="Закрыть">×</button></div><div class="dialog-body"><div class="eyebrow">REPO MAP / 0.1.2</div><h2>КАРТА ВАШЕГО КОДА_</h2><p>Откройте локальную папку или клонируйте Git-репозиторий. Исходный код не загружается на серверы.</p><div class="about-author"><img src="assets/icon.png" alt="Иконка Repo Map" width="44" height="44"><div><span class="field-label">СОЗДАТЕЛЬ</span><strong>/home/whydoyousee</strong><a id="creatorGithub" href="https://github.com/whydoyouseegit">github.com/whydoyouseegit ↗</a></div></div><dl class="help-list"><dt>ЛКМ + движение</dt><dd>Вращение вселенной</dd><dt>ПКМ + движение</dt><dd>Сдвиг карты</dd><dt>Колесо / + / −</dt><dd>Приближение</dd><dt>Клик по узлу</dt><dd>Код, состав и связи</dd><dt>/</dt><dd>Поиск файла или символа</dd><dt>Пробел</dt><dd>Пауза вращения</dd><dt>R</dt><dd>Исходный ракурс</dd><dt>Esc</dt><dd>Снять выделение</dd></dl><p class="fine">JS / TS / JSX / TSX: синтаксический анализ, импорты и состав. Python, C/C++, Java, C#, Rust и Go: упрощённое выделение символов. Карта не является графом всех вызовов. Клонирование требует сети; анализ папки работает офлайн.</p><button class="button primary close-dialog">Понятно</button></div></dialog>
+  <dialog id="progressDialog"><div class="dialog-bar"><span>user@terminal:~$ index project</span></div><div class="dialog-body"><div class="eyebrow">АНАЛИЗ ПРОЕКТА</div><h2>СОБИРАЕМ ВСЕЛЕННУЮ<span class="blink">_</span></h2><p id="progressText">Чтение структуры…</p><progress id="progress" max="100"></progress><button id="cancelScan" class="button">Отменить</button></div></dialog>
+  <div id="toast" class="toast" role="status" hidden></div>
+  <script src="demo.js"></script><script src="universe.js"></script><script src="app.js"></script>
+</body>
+</html>
