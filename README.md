@@ -22,8 +22,8 @@
 <p align="center">
   <a href="https://github.com/whydoyouseegit/repomap/releases/latest"><img src="https://img.shields.io/github/v/release/whydoyouseegit/repomap?style=flat-square&amp;label=%D0%B2%D0%B5%D1%80%D1%81%D0%B8%D1%8F&amp;color=white" alt="Последний релиз" /></a>
   <a href="LICENSE"><img src="https://img.shields.io/badge/%D0%BB%D0%B8%D1%86%D0%B5%D0%BD%D0%B7%D0%B8%D1%8F-MIT-white?style=flat-square" alt="Лицензия MIT" /></a>
-  <img src="https://img.shields.io/badge/Windows-10%2520%252F%252011-white?style=flat-square" alt="Windows 10 и 11" />
-  <a href="https://github.com/whydoyouseegit/repomap/pulls"><img src="https://img.shields.io/badge/PR-%D0%B4%D0%BE%D0%B1%D1%80%D0%BE%2520%D0%BF%D0%BE%D0%B6%D0%B0%D0%BB%D0%BE%D0%B2%D0%B0%D1%82%D1%8C-white?style=flat-square" alt="Принимаются pull request" /></a>
+  <img src="https://img.shields.io/badge/Windows-10%20%2F%2011-white?style=flat-square" alt="Windows 10 и 11" />
+  <a href="https://github.com/whydoyouseegit/repomap/pulls"><img src="https://img.shields.io/badge/PR-%D0%B4%D0%BE%D0%B1%D1%80%D0%BE%20%D0%BF%D0%BE%D0%B6%D0%B0%D0%BB%D0%BE%D0%B2%D0%B0%D1%82%D1%8C-white?style=flat-square" alt="Принимаются pull request" /></a>
 </p>
 
 > [!NOTE]
